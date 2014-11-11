@@ -22,7 +22,7 @@
 		xhr.send();
 	}
 
-	global.ServerTime = {
+	var ServerTime = {
 		init: function (port, host, updateInterval) {
 			host = host || window.document.location.hostname;
 			port = port || 37890;
@@ -31,9 +31,18 @@
 			update(url);
 			global.setInterval(function () { update(url); }, updateInterval);
 		},
+
+		/** @returns {Number} current server epoch time [milliseconds]. */
+		getTimestamp: function () {
+			return (new Date()) - offset;
+		},
+
+		/** @returns {Date} Date instance set to the current server time. */
 		get: function () {
-			return new Date((new Date) - offset);
+			return new Date(ServerTime.getTimestamp());
 		}
 	};
+
+	global.ServerTime = ServerTime;
 
 })(this);
